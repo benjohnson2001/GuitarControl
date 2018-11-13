@@ -1,8 +1,8 @@
-function deleteMediaItem()
+function deleteMediaItem(guitarName)
 
 	local timeOfCurrentBar = getTimeOfCurrentBar()
 
-	local messageTrack = getTrack("tele mode")
+	local messageTrack = getTrack(guitarName .. " mode")
 	local numberOfMediaItems = reaper.CountTrackMediaItems(messageTrack)
 
 	for i = 0, numberOfMediaItems - 1 do
@@ -20,11 +20,11 @@ function deleteMediaItem()
 	end
 end
 
-function getMediaItemMessage()
+function getMediaItemMessage(guitarName)
 
 	local timeOfCurrentBar = getTimeOfCurrentBar()
 
-	local messageTrack = getTrack("tele mode")
+	local messageTrack = getTrack(guitarName .. " mode")
 	local numberOfMediaItems = reaper.CountTrackMediaItems(messageTrack)
 
 	for i = 0, numberOfMediaItems - 1 do
@@ -48,9 +48,9 @@ function getMediaItemMessage()
 	return "clear"
 end
 
-function insertMediaItem(message)
+function insertMediaItem(guitarName, message)
 
-	local messageTrack = getTrack("tele mode")
+	local messageTrack = getTrack(guitarName .. " mode")
 	local timeOfCurrentBar = getTimeOfCurrentBar()
 
 	local mediaItem = reaper.AddMediaItemToTrack(messageTrack)

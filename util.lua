@@ -57,3 +57,4 @@ function barWidth()
 
 	return numberOfBeatsPerBar / bpm * numberOfSecondsPerMinute
 end
+

@@ -1,0 +1,1 @@
+defaultTeleModeValue = "chord"
