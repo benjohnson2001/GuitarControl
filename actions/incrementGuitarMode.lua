@@ -4,11 +4,11 @@ require(workingDirectory .. "/preferences")
 require(workingDirectory .. "/mediaItemMessages")
 require(workingDirectory .. "/envelopeFunctions")
 
-function decrementGuitarMode(guitarName)
+function incrementGuitarMode(guitarName)
 
 	local soloModeValue = 1.0
 	local chordModeValue = 0.75
-	local patternsModeValue = 0.5
+	local patternModeValue = 0.5
 
 	local trackEnvelope = getTrackEnvelope(guitarName)
 	deleteEnvelopePoints(trackEnvelope)
@@ -17,19 +17,19 @@ function decrementGuitarMode(guitarName)
 
 	if previousMode == "chord" then
 
-		setGuitarMode(guitarName, "clear")
-
-	elseif previousMode == "clear" then
-
-		insertEnvelopePoint(trackEnvelope, patternsModeValue)
-		setGuitarMode(guitarName, "patterns")
-	
-	elseif previousMode == "patterns" then
-
 		insertEnvelopePoint(trackEnvelope, soloModeValue)
 		setGuitarMode(guitarName, "solo")
 
 	elseif previousMode == "solo" then
+
+		insertEnvelopePoint(trackEnvelope, patternModeValue)
+		setGuitarMode(guitarName, "pattern")
+	
+	elseif previousMode == "pattern" then
+
+		setGuitarMode(guitarName, "clear")
+
+	elseif previousMode == "clear" then
 
 		insertEnvelopePoint(trackEnvelope, chordModeValue)
 		setGuitarMode(guitarName, "chord")
@@ -44,8 +44,9 @@ function decrementGuitarMode(guitarName)
 	end
 end
 
-
-function decrementGuitarModeForSelectedTracks()
+local teleModeHasNotBeenChanged = true
+local stratModeHasNotBeenChanged = true
+function incrementGuitarModeForSelectedTracks()
 
 	local activeProjectIndex = 0
 	local selectedTrackIndex = 0
@@ -61,17 +62,21 @@ function decrementGuitarModeForSelectedTracks()
 
 	 	local _, trackName = reaper.GetTrackName(track, "")
 
-	 	if string.match(trackName, "tele") then
-	 		decrementGuitarMode("tele")
+	 	if teleModeHasNotBeenChanged and string.match(trackName, "tele") then
+	 		incrementGuitarMode("tele")
+	 		teleModeHasNotBeenChanged = false
 	 	end
 
-	 	if string.match(trackName, "strat") then
-	 		decrementGuitarMode("strat")
+	 	if stratModeHasNotBeenChanged and string.match(trackName, "strat") then
+	 		incrementGuitarMode("strat")
+	 		stratModeHasNotBeenChanged = false
 	 	end
 
 		selectedTrackIndex = selectedTrackIndex + 1
 	end
 end
 
-decrementGuitarModeForSelectedTracks()
+startUndoBlock()
+incrementGuitarModeForSelectedTracks()
 reaper.UpdateArrange()
+endUndoBlock("increment guitar mode")
