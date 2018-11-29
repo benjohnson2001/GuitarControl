@@ -13,12 +13,16 @@ function deleteEnvelopePoints(trackEnvelope)
 	reaper.DeleteEnvelopePointRange(trackEnvelope, timeOfCurrentBar-envelopeTimeDelta/2-tolerance, timeOfNextBar-envelopeTimeDelta+tolerance)
 end
 
+function squareEnvelopeShape()
+	return 1
+end
+
 function insertEnvelopePoint(trackEnvelope, envelopePointValue)
-	
+
 	local timeOfCurrentBar = getTimeOfCurrentBar()
 	local timeOfNextBar = getTimeOfNextBar()
 
-	local shape = -1
+	local shape = squareEnvelopeShape()
 	local tension = -1
 	local pointIsSelected = false
 
