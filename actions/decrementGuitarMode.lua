@@ -12,6 +12,7 @@ function decrementGuitarMode(guitarName)
 
 	local trackEnvelope = getTrackEnvelope(guitarName)
 	deleteEnvelopePoints(trackEnvelope)
+	setFirstEnvelopePointShapeToBeSquare(trackEnvelope)
 
 	local previousMode = getMediaItemMessage(guitarName)
 
